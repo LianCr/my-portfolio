@@ -1,0 +1,121 @@
+---
+title: "DealLens"
+description: "Enter a dealer quote for a real vehicle and see where it lands in the market distribution, 24 months of price history with pinned events, and a grounded AI negotiation brief. The verdict renders without JavaScript."
+image: "/project/deallens.png"
+technologies:
+  [
+    "Next.js",
+    "TypeScript",
+    "GraphQL",
+    "D3.js",
+    "Claude",
+    "Vitest",
+    "Playwright",
+  ]
+github: "https://github.com/LianCr/deallens"
+live: "https://deallens-xi.vercel.app/"
+link: "https://deallens-xi.vercel.app/"
+timeline: "2026"
+role: "Solo — architecture, GraphQL gateway, D3 visualizations, AI grounding, CI"
+status: "completed"
+featured: true
+order: 2
+isPublished: true
+isWorking: false
+challenges:
+  [
+    "No free API exposes real vehicle transaction prices — so the pricing layer is synthetic, and the hard part became making that impossible to forget.",
+    "An AI negotiation brief is only useful if every number in it is defensible, which rules out putting client-side numbers in the prompt.",
+    "Performance claims decay silently unless something fails the build when they do.",
+  ]
+learnings:
+  [
+    "Encoding data provenance in the type system (DataSourceTag: REAL | DEMO) beats a disclosure convention — the UI cannot forget to label what the schema forces it to carry.",
+    "Making the URL the only state gets JavaScript-optional rendering almost for free, and makes every view shareable by construction.",
+    "A performance budget in CI is a different artifact from a performance score in a README: one is a claim, the other is a constraint.",
+  ]
+---
+
+# DealLens
+
+A dealer hands you a number. Is it good? The honest answer needs three things
+you don't have in the showroom: where that number sits in the distribution of
+comparable listings, what the price has done over the last two years and why,
+and what you can defensibly say when you negotiate.
+
+DealLens takes a quote — `/deal/honda/2022/civic?quote=24500` — and renders all
+three. The verdict is server-rendered, so it works with JavaScript turned off.
+
+## Trust as an engineering problem
+
+The premise is that a pricing tool's real product is credibility, and
+credibility is buildable. Three mechanisms carry it:
+
+**Isomorphic conclusions.** The verdict is computed server-side and rendered as
+HTML. D3 charts render as pure SVG on the server, then hydrate in place when
+scrolled into view — the static skeleton upgrades with zero layout shift. The
+URL is the only state mechanism, so there's no client store to desynchronize
+and every view is shareable by construction.
+
+**Typed data honesty.** The GraphQL schema carries a `DataSourceTag: REAL | DEMO`
+enum on every source. NHTSA vPIC (vehicle specs) and EPA fueleconomy.gov (fuel
+economy and weekly fuel prices) are live and typed `REAL`. The pricing dataset
+is deterministic synthetic data, typed `DEMO`, and it renders a "Demo pricing
+data" badge everywhere it appears. The point of putting this in the schema
+rather than in a convention is that the UI _cannot_ forget to disclose it.
+
+**Performance as a gate.** Lighthouse 100 across Performance, Accessibility,
+Best Practices, and SEO on all three pages — enforced by a CI budget gate, not
+measured once and screenshotted. LCP lands at 0.51–0.52s, CLS at 0, TBT at 0ms,
+and first-load JS at 48–74 KB against a 150 KB budget.
+
+## Grounding the AI: math decides, AI narrates
+
+Every number the AI says traces back to a FACTS block computed server-side in a
+pure, snapshot-tested module. Client-side numbers never enter a prompt.
+
+- **Deal brief** — a streamed negotiation summary, permanently labelled
+  "AI-generated · grounded in the numbers above".
+- **Natural-language finder** — turns "reliable family SUV under $30k" into up
+  to three candidates, constrained to a make whitelist and then verified against
+  live vPIC. Hallucinated models are dropped after generation, and the UI reports
+  how many survived.
+- **Ask about this deal** — multi-turn Q&A that rebuilds the FACTS block per
+  question, server-side, and treats user input strictly as a question rather
+  than an instruction.
+
+Cost control is part of the design, not an afterthought: per-IP and global daily
+limits with honest 429 responses, a response cache bucketed by vehicle and quote,
+and `MOCK_AI=1` for deterministic zero-cost CI runs.
+
+## Refusing to guess
+
+The rule that shaped the most code: **thin markets get an honest empty state, never
+interpolation.** Roughly 5% of demo vehicles are deliberately given thin markets
+so that "not enough data to say — and we won't guess" stays a reachable,
+demonstrable state rather than a branch nobody exercises.
+
+The same instinct runs through the edges. When vPIC and EPA disagree on a model
+name and prefix matching fails, the fuel-cost bar is _hidden_ rather than
+estimated. When the fuel feed is down, the fallback assumption is displayed as
+an assumption.
+
+## Tested like it matters
+
+- **89 unit and contract tests** (Vitest) — contract tests lock behavior against
+  real captured API payloads, so an upstream shape change fails locally instead
+  of in production.
+- **56 E2E runs** (Playwright) across Chromium, Firefox, and WebKit — plus a
+  dedicated no-JavaScript project, because "works without JS" is a claim that
+  needs a test, not an intention.
+- **CI pipeline:** lint → typecheck → unit → build → E2E matrix → Lighthouse
+  budget gate.
+
+## What it deliberately doesn't claim
+
+No free API exposes real transaction prices, so DealLens does not pretend to
+know them. The pricing distribution is synthetic and labelled as such at every
+appearance, and the data layer is built behind an adapter so a real source can
+be swapped in without touching the domain logic. Everything downstream of that
+— the percentile math, the verdict thresholds, the negotiation chips — is real
+and would not change.

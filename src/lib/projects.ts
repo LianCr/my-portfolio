@@ -7,15 +7,20 @@ function getTimelineYear(timeline?: string): number {
   return match ? Number(match[0]) : 0;
 }
 
-export function sortProjectsByLatest<T extends Project & { timeline?: string }>(
-  projects: T[]
-): T[] {
-  return [...projects].sort((a, b) => {
-    const yearDiff = getTimelineYear(b.timeline) - getTimelineYear(a.timeline);
+type Sortable = Project & { timeline?: string; order?: number };
 
-    if (yearDiff !== 0) {
-      return yearDiff;
-    }
+/**
+ * Explicit `order` first (ascending), then newest timeline, then title. The
+ * flagship project isn't necessarily the most recent one, so chronology alone
+ * can't express the intended order.
+ */
+export function sortProjectsByLatest<T extends Sortable>(projects: T[]): T[] {
+  return [...projects].sort((a, b) => {
+    const orderDiff = (a.order ?? 999) - (b.order ?? 999);
+    if (orderDiff !== 0) return orderDiff;
+
+    const yearDiff = getTimelineYear(b.timeline) - getTimelineYear(a.timeline);
+    if (yearDiff !== 0) return yearDiff;
 
     return a.title.localeCompare(b.title);
   });

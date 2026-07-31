@@ -1,0 +1,120 @@
+---
+title: "Smart Money Decoder"
+description: "Paste a Polymarket wallet, find its largest political bet, reconstruct the news around entry, and get an AI verdict — then backtest that verdict against how the market actually resolved."
+image: "/project/smart-money-decoder.png"
+technologies:
+  ["Python", "FastAPI", "React", "Claude", "Polymarket APIs", "Tavily", "Redis"]
+github: "https://github.com/LianCr/smart-money-decoder"
+live: "https://smart-money-decoder.onrender.com/"
+link: "https://smart-money-decoder.onrender.com/"
+timeline: "2026"
+role: "Solo — architecture, backend, frontend, backtest pipeline"
+status: "completed"
+featured: true
+order: 1
+isPublished: true
+isWorking: true
+challenges:
+  [
+    "A wallet's true win rate is not computable from public APIs — losing positions leave no trace and vanish from the endpoints, inflating any number you compute.",
+    "An LLM asked to interpret a financial position will happily invent a catalyst, a date, or a confidence score if the data is thin.",
+    "Replaying a decision at a historical timestamp means every layer has to agree on what 'today' was.",
+  ]
+learnings:
+  [
+    "Guardrails belong in code, not in the prompt. A validation matrix that rejects the response is enforceable; an instruction not to fabricate is not.",
+    "Scoring a prediction without scoring its difficulty flatters the system — a bet entered at 0.95 is not the same call as one entered at 0.51.",
+    "The most credible thing a tool can do is state precisely what it refuses to claim.",
+  ]
+---
+
+# Smart Money Decoder
+
+Polymarket publishes every trade a wallet makes. That sounds like it should
+settle the question "is this trader actually smart?" — but it doesn't, and the
+gap between what the data looks like it can prove and what it can actually prove
+is the whole reason this project exists.
+
+You paste a wallet address. The system finds that wallet's largest political
+position, pulls the news that was circulating around the entry, and issues a
+verdict card: follow this bet, or don't. Then a separate pipeline replays that
+same decision engine at historical timestamps and scores its calls against how
+the markets really resolved.
+
+> **The honest limitation, stated up front:** a wallet's true win rate is _not_
+> reliably computable from public APIs. Losing positions leave no on-chain trace
+> and disappear from the endpoints, so any win rate you compute is inflated by
+> survivorship. The backtest therefore measures **the decoder's accuracy** — its
+> call versus reality — not the wallet's P&L.
+
+## Architecture
+
+Four layers, deliberately separated so the AI never touches the numbers:
+
+- **Fetcher** — read-only HTTP against Polymarket's positions, trades, and
+  activity endpoints, plus Tavily for news retrieval.
+- **Analyzer** — invokes Claude to interpret the position, wrapped in validation
+  that runs _after_ generation and can reject the output.
+- **Renderer** — builds the verdict card.
+- **Backtest** — a sealed offline replay of the decoder at historical snapshots.
+
+## Three design commitments
+
+### 1. Anti-fabrication is enforced in code
+
+Before a model response is accepted, a confidence matrix validates it. Outputs
+that invent a catalyst, tamper with a confidence score, or compute a date the
+contract never provided are rejected outright — `FABRICATED_CATALYST`,
+`CONFIDENCE_TAMPERED`, and friends are guard names in the codebase, not
+aspirations in a prompt.
+
+### 2. Math decides, AI narrates
+
+Every number on the card comes from a code-based lookup. The model is given the
+figures and asked to explain them; it is never asked to produce one. This is the
+single highest-leverage decision in the project — it converts "did the model
+hallucinate a price?" from a monitoring problem into an impossibility.
+
+### 3. Missing data returns nothing, not a guess
+
+Absent entry times return `None`. Auxiliary data — avatars, P&L — is best-effort
+and never blocks the core analysis. Nothing is interpolated to make a card look
+more complete than the evidence supports.
+
+## The backtest: T−7 / T−1 with difficulty scoring
+
+For every resolved political market a wallet held, the decoder is replayed at
+two snapshots — seven days before resolution, and one day before — using only
+the price and context available at that moment. Its verdict is then compared
+against the real settlement.
+
+Raw hit rate would flatter the system, so every sample carries a difficulty
+score:
+
+```python
+difficulty = 1 - abs(entry_price - 0.5) * 2
+```
+
+A position entered near `0.5` is a **coin-flip** call. One entered near `0` or
+`1` is **near-settled** — the outcome was already mostly priced in. Without this,
+an easy call and genuine foresight score identically.
+
+Two biases are surfaced rather than hidden: short-fuse markets are filtered out
+for lack of T−7 history, and high-conviction wallets tend to enter at extreme
+prices, skewing the sample toward _near-settled_ difficulty.
+
+## What building it actually taught me
+
+The Polymarket API has sharp edges that only show up in production, and the
+codebase documents each one: server-side `conditionId` filtering on the activity
+endpoint is broken (pull everything, filter locally); the Gamma API refuses to
+return resolved markets unless you pass `closed=true`; its `outcomes` and
+`outcomePrices` fields are JSON-encoded strings inside a JSON response.
+
+The subtlest one was the backtest itself. Replaying a decision at a historical
+timestamp only works if _every_ layer agrees on what "today" is — so `as_of`
+has to thread all the way through, or the decoder quietly reasons about a market
+using tomorrow's information.
+
+> This project analyzes public data for educational purposes. It is not
+> investment advice, and it does not pretend to be.

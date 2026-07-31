@@ -22,6 +22,9 @@ const projects = defineCollection({
       .enum(["completed", "in-progress", "archived"])
       .default("completed"),
     featured: z.boolean().default(false),
+    // Explicit display order (ascending). Chronology alone can't express
+    // "flagship first", so this wins over timeline when set.
+    order: z.number().default(999),
     challenges: z.array(z.string()).optional(),
     learnings: z.array(z.string()).optional(),
     isPublished: z.boolean().default(true),
@@ -38,29 +41,6 @@ const projects = defineCollection({
   },
 });
 
-const blogs = defineCollection({
-  name: "blogs",
-  directory: "content/blogs",
-  include: "*.mdx",
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    image: z.string(),
-    tags: z.array(z.string()),
-    date: z.string(),
-    isPublished: z.boolean().default(true),
-    content: z.string(),
-  }),
-  transform: async (document, context) => {
-    const mdx = await compileMDX(context, document);
-    return {
-      ...document,
-      mdx,
-      slug: document._meta.path,
-    };
-  },
-});
-
 export default defineConfig({
-  collections: [projects, blogs],
+  collections: [projects],
 });
