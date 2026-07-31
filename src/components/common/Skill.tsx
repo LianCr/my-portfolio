@@ -21,8 +21,9 @@ export default function Skill({ name, href, children, className }: SkillProps) {
         className
       )}
     >
-      <span className="size-4 shrink-0">{children}</span>
-      <span className="ml-1 text-sm font-bold">{name}</span>
+      {/* No icon registered? Don't reserve the slot — it reads as a gap. */}
+      {children && <span className="mr-1 size-4 shrink-0">{children}</span>}
+      <span className="text-sm font-bold">{name}</span>
     </Link>
   );
 }

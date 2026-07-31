@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { ArrowRight, Globe, PlayCircle } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -48,11 +49,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="from-primary/10 via-primary/5 to-background flex h-full w-full items-center justify-center bg-linear-to-br">
               <div className="space-y-4 p-8 text-center">
                 <div className="flex flex-wrap justify-center gap-2">
-                  {project.technologies.slice(0, 3).map((tech, index) => (
-                    <div key={index} className="size-12 opacity-40">
-                      {getTechnologyIcon(tech)}
-                    </div>
-                  ))}
+                  {/* Only techs with a registered icon — the rest would render
+                      as empty boxes in this image-less placeholder. */}
+                  {project.technologies
+                    .map((tech) => [tech, getTechnologyIcon(tech)] as const)
+                    .filter(([, icon]) => icon)
+                    .slice(0, 3)
+                    .map(([tech, icon]) => (
+                      <div key={tech} className="size-12 opacity-40">
+                        {icon}
+                      </div>
+                    ))}
                 </div>
                 <p className="text-muted-foreground text-sm font-medium">
                   {project.title}
@@ -140,19 +147,33 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <h4 className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
             Technologies
           </h4>
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map((technology, index) => (
-              <Tooltip key={index}>
-                <TooltipTrigger asChild>
-                  <div className="size-7 cursor-pointer transition-transform duration-200 hover:scale-110">
-                    {getTechnologyIcon(technology)}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{technology}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            {project.technologies.map((technology) => {
+              const icon = getTechnologyIcon(technology);
+
+              // Without an icon this would be an invisible but hoverable box,
+              // so unregistered technologies fall back to a labelled chip.
+              if (!icon) {
+                return (
+                  <Badge key={technology} variant="outline" className="text-xs">
+                    {technology}
+                  </Badge>
+                );
+              }
+
+              return (
+                <Tooltip key={technology}>
+                  <TooltipTrigger asChild>
+                    <div className="size-7 cursor-pointer transition-transform duration-200 hover:scale-110">
+                      {icon}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{technology}</p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
           </div>
         </div>
       </CardContent>

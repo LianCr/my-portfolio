@@ -1,16 +1,26 @@
 import React from "react";
 
+import Angular from "@/components/technologies/Angular";
+import ApolloGraphQL from "@/components/technologies/ApolloGraphQL";
 import AuthJs from "@/components/technologies/AuthJs";
 import AWS from "@/components/technologies/AWS";
 import BetterAuth from "@/components/technologies/BetterAuth";
 import Bun from "@/components/technologies/Bun";
+import Claude from "@/components/technologies/Claude";
 import Clerk from "@/components/technologies/Clerk";
+import Cypress from "@/components/technologies/Cypress";
+import D3 from "@/components/technologies/D3";
 import Docker from "@/components/technologies/Docker";
 import ExpressJs from "@/components/technologies/ExpressJs";
+import FastApi from "@/components/technologies/FastApi";
 import Figma from "@/components/technologies/Figma";
 import Gemini from "@/components/technologies/Gemini";
+import GitHubActions from "@/components/technologies/GitHubActions";
+import GraphQL from "@/components/technologies/GraphQL";
 import JavaScript from "@/components/technologies/JavaScript";
+import Jest from "@/components/technologies/Jest";
 import LangChain from "@/components/technologies/LangChain";
+import MaterialUI from "@/components/technologies/MaterialUI";
 import MongoDB from "@/components/technologies/MongoDB";
 import NestJs from "@/components/technologies/NestJs";
 import Netlify from "@/components/technologies/Netlify";
@@ -19,7 +29,10 @@ import NodeJs from "@/components/technologies/NodeJs";
 import Nodemailer from "@/components/technologies/Nodemailer";
 import PostgreSQL from "@/components/technologies/PostgreSQL";
 import Prisma from "@/components/technologies/Prisma";
+import Python from "@/components/technologies/Python";
 import ReactIcon from "@/components/technologies/ReactIcon";
+import Redis from "@/components/technologies/Redis";
+import Redux from "@/components/technologies/Redux";
 import Resend from "@/components/technologies/Resent";
 import Shadcn from "@/components/technologies/Shadcn";
 import Stripe from "@/components/technologies/Stripe";
@@ -27,6 +40,8 @@ import Supabase from "@/components/technologies/Supabase";
 import TailwindCss from "@/components/technologies/TailwindCss";
 import TypeScript from "@/components/technologies/TypeScript";
 import Vercel from "@/components/technologies/Vercel";
+import Vitest from "@/components/technologies/Vitest";
+import WebAuthn from "@/components/technologies/WebAuthn";
 
 export interface TechnologyEntry {
   id: string;
@@ -70,6 +85,29 @@ export const technologies: TechnologyEntry[] = [
   { id: "AWS", name: "AWS", href: "https://aws.amazon.com/" },
   { id: "Figma", name: "Figma", href: "https://figma.com/" },
   { id: "Docker", name: "Docker", href: "https://www.docker.com/" },
+  { id: "Python", name: "Python", href: "https://www.python.org/" },
+  { id: "FastApi", name: "FastAPI", href: "https://fastapi.tiangolo.com/" },
+  { id: "Angular", name: "Angular", href: "https://angular.dev/" },
+  { id: "Redux", name: "Redux Toolkit", href: "https://redux-toolkit.js.org/" },
+  { id: "GraphQL", name: "GraphQL", href: "https://graphql.org/" },
+  {
+    id: "ApolloGraphQL",
+    name: "Apollo GraphQL",
+    href: "https://www.apollographql.com/",
+  },
+  { id: "D3", name: "D3.js", href: "https://d3js.org/" },
+  { id: "Redis", name: "Redis", href: "https://redis.io/" },
+  { id: "Claude", name: "Claude", href: "https://www.anthropic.com/claude" },
+  { id: "MaterialUI", name: "Material UI", href: "https://mui.com/" },
+  { id: "Vitest", name: "Vitest", href: "https://vitest.dev/" },
+  { id: "Jest", name: "Jest", href: "https://jestjs.io/" },
+  { id: "Cypress", name: "Cypress", href: "https://www.cypress.io/" },
+  {
+    id: "GitHubActions",
+    name: "GitHub Actions",
+    href: "https://github.com/features/actions",
+  },
+  { id: "WebAuthn", name: "WebAuthn", href: "https://webauthn.guide/" },
 ];
 
 /** Lookup by id (e.g. "TypeScript") or display name (e.g. "Next.js"). */
@@ -107,49 +145,110 @@ const iconByKey: Record<string, React.ReactNode> = {
   AWS: <AWS />,
   Figma: <Figma />,
   Docker: <Docker />,
+  Python: <Python />,
+  FastAPI: <FastApi />,
+  FastApi: <FastApi />,
+  Angular: <Angular />,
+  "Redux Toolkit": <Redux />,
+  Redux: <Redux />,
+  GraphQL: <GraphQL />,
+  "Apollo GraphQL": <ApolloGraphQL />,
+  ApolloGraphQL: <ApolloGraphQL />,
+  "D3.js": <D3 />,
+  D3: <D3 />,
+  Redis: <Redis />,
+  Claude: <Claude />,
+  "Material UI": <MaterialUI />,
+  MaterialUI: <MaterialUI />,
+  Vitest: <Vitest />,
+  Jest: <Jest />,
+  Cypress: <Cypress />,
+  "GitHub Actions": <GitHubActions />,
+  GitHubActions: <GitHubActions />,
+  WebAuthn: <WebAuthn />,
+};
+
+/**
+ * Maps the way a technology gets written in MDX frontmatter or the experience
+ * config onto a canonical key in `iconByKey`. Lookup is lowercased, so only one
+ * spelling per variant is needed here.
+ */
+const KEY_ALIASES: Record<string, string> = {
+  typescript: "TypeScript",
+  javascript: "JavaScript",
+  react: "React",
+  "react.js": "React",
+  nextjs: "Next.js",
+  "next.js": "Next.js",
+  next: "Next.js",
+  node: "Node.js",
+  nodejs: "Node.js",
+  "node.js": "Node.js",
+  express: "Express",
+  "express.js": "Express",
+  mongodb: "MongoDB",
+  postgresql: "PostgreSQL",
+  postgres: "PostgreSQL",
+  nestjs: "NestJS",
+  prisma: "Prisma",
+  bun: "Bun",
+  "tailwind css": "Tailwind CSS",
+  tailwindcss: "Tailwind CSS",
+  docker: "Docker",
+  aws: "AWS",
+
+  python: "Python",
+  fastapi: "FastAPI",
+  angular: "Angular",
+  redux: "Redux Toolkit",
+  "redux toolkit": "Redux Toolkit",
+  rtk: "Redux Toolkit",
+  "rtk query": "Redux Toolkit",
+  graphql: "GraphQL",
+  apollo: "Apollo GraphQL",
+  "apollo graphql": "Apollo GraphQL",
+  d3: "D3.js",
+  "d3.js": "D3.js",
+  redis: "Redis",
+  claude: "Claude",
+  "claude api": "Claude",
+  anthropic: "Claude",
+  mui: "Material UI",
+  "material ui": "Material UI",
+  "material-ui": "Material UI",
+  vitest: "Vitest",
+  jest: "Jest",
+  cypress: "Cypress",
+  "github actions": "GitHub Actions",
+  webauthn: "WebAuthn",
 };
 
 /** Normalize common variants to a key that exists in iconByKey. */
-function normalizeTechnologyKey(name: string): string | null {
-  const lower = name.toLowerCase();
-  if (lower === "typescript" || name === "Typescript") return "TypeScript";
-  if (lower === "nextjs" || lower === "next.js") return "Next.js";
-  if (lower === "react") return "React";
-  if (lower === "nodejs" || lower === "node.js" || lower === "node")
-    return "Node.js";
-  if (lower === "mongodb") return "MongoDB";
-  if (lower === "postgresql") return "PostgreSQL";
-  if (lower === "nestjs") return "NestJS";
-  if (lower === "prisma") return "Prisma";
-  if (lower === "javascript") return "JavaScript";
-  if (lower === "bun") return "Bun";
-  if (lower === "express") return "Express";
-  if (lower === "tailwind css" || lower === "tailwindcss")
-    return "Tailwind CSS";
-  if (lower === "docker") return "Docker";
-  return name;
+function normalizeTechnologyKey(name: string): string {
+  return KEY_ALIASES[name.trim().toLowerCase()] ?? name;
 }
 
 export function getTechnologyIcon(name: string): React.ReactNode {
-  const key = normalizeTechnologyKey(name) ?? name;
-  return iconByKey[key] ?? iconByKey[name] ?? null;
+  return iconByKey[normalizeTechnologyKey(name)] ?? iconByKey[name] ?? null;
 }
 
+/** Homepage Skills grid — 5 columns, so keep this a multiple of 5. */
 export const SKILLS = [
   "TypeScript",
   "React",
-  "NextJs",
-  "PostgreSQL",
-  "MongoDB",
-  "NestJS",
+  "Next.js",
+  "Angular",
+  "Node.js",
   "Express",
-  "Tailwind CSS",
-  "Supabase",
+  "Python",
+  "FastAPI",
+  "GraphQL",
+  "MongoDB",
+  "PostgreSQL",
+  "Redis",
+  "D3.js",
+  "Claude",
   "AWS",
-  "Figma",
-  "JavaScript",
-  "Prisma",
-  "Docker",
 ] as const;
 
 export function getTechnologiesByIds(ids: string[]): TechnologyEntry[] {
@@ -158,6 +257,6 @@ export function getTechnologiesByIds(ids: string[]): TechnologyEntry[] {
 }
 
 export function getTechnologyByName(name: string): TechnologyEntry | undefined {
-  const key = normalizeTechnologyKey(name) ?? name;
+  const key = normalizeTechnologyKey(name);
   return technologies.find((t) => t.name === key || t.id === key);
 }
