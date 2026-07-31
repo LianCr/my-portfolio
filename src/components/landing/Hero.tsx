@@ -1,13 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { BadgeCheck } from "lucide-react";
 
-import { heroConfig, socialLinks } from "@/config/Hero";
+import { heroConfig } from "@/config/Hero";
 
 import Container from "../common/Container";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import AnimatedHeroTitle from "./AnimatedHeroTitle";
+import HeroSocials from "./HeroSocials";
 
 export default function Hero() {
   const { name, rotatingTitles, avatar, location, bio } = heroConfig;
@@ -57,27 +56,7 @@ export default function Hero() {
           )}
 
           {/* Social Icons */}
-          <div className="flex items-center gap-3">
-            {socialLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Tooltip key={link.name} delayDuration={0}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={link.href}
-                      target="_blank"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Icon className="size-5" />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{link.name}</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
+          <HeroSocials />
         </div>
       </div>
     </Container>

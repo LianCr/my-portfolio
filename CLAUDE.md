@@ -14,7 +14,7 @@ The goal is a recruiting funnel, not a template showcase: Hero → Featured Proj
 - Location: Los Angeles, CA
 - GitHub: https://github.com/LianCr
 - LinkedIn: https://www.linkedin.com/in/ryan-lian-a1b719249/
-- Email: nicklien307@gmail.com
+- Email: liancr307@gmail.com
 - No X/Twitter account — don't add one back to `socialLinks`
 - No resume PDF / download link anywhere. Work history lives on the site itself (`/work-experience`), not behind a file download.
 

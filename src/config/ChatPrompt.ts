@@ -8,7 +8,9 @@ function generateSystemPrompt(): string {
   const skillNames = about.skills.join(", ");
 
   const socialLinksText = socialLinks
-    .map((link) => `${link.name}: ${link.href}`)
+    // Prefer the plain value over the href so the email reads as an address
+    // rather than "mailto:...".
+    .map((link) => `${link.name}: ${link.copyValue ?? link.href}`)
     .join("\n- ");
 
   const experienceText = experiences

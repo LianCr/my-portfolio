@@ -23,7 +23,7 @@ export const siteConfig = {
     name: about.name,
     github: "LianCr",
     linkedin: "ryan-lian-a1b719249",
-    email: "nicklien307@gmail.com",
+    email: "liancr307@gmail.com",
   },
   keywords: [
     "chunren lian",

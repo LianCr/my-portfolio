@@ -3,11 +3,10 @@ export const ctaConfig = {
   profileImage: "/assets/avatar.png",
   profileAlt: "Chunren Lian",
 
-  // The address is the button label on purpose — a mailto: does nothing on a
-  // machine with no mail client configured, which is common on locked-down
-  // work laptops. Showing it means the CTA still works when the link doesn't.
-  email: "nicklien307@gmail.com",
-  subject: "Hello from your portfolio",
+  // The address is the button label, and clicking copies it rather than
+  // opening a mailto: — a mailto does nothing on a machine with no mail client
+  // configured, which is common on locked-down work laptops.
+  email: "liancr307@gmail.com",
 
   // Pre-text message
   preText:

@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
 import Image from "next/image";
 
 import { Check, Copy } from "lucide-react";
 
 import { ctaConfig } from "@/config/CTA";
+import { useCopy } from "@/hooks/use-copy";
 
 import Container from "../common/Container";
 
@@ -14,33 +13,16 @@ interface CallToActionProps {
   profileImage?: string;
   profileAlt?: string;
   email?: string;
-  subject?: string;
   preText?: string;
 }
-
-const CHIP =
-  "inline-flex items-center self-end rounded-md border border-dashed border-black/20 bg-black/5 px-2 py-1 text-sm text-black shadow-[0_0_5px_rgba(0,0,0,0.1)] transition-all dark:border-white/30 dark:bg-white/15 dark:text-white dark:shadow-[0_0_5px_rgba(255,255,255,0.1)]";
 
 export default function CTA({
   profileImage = ctaConfig.profileImage,
   profileAlt = ctaConfig.profileAlt,
   email = ctaConfig.email,
-  subject = ctaConfig.subject,
   preText = ctaConfig.preText,
 }: CallToActionProps) {
-  const [copied, setCopied] = useState(false);
-  const href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Clipboard blocked (insecure origin, denied permission) — the address is
-      // rendered as text anyway, so it can still be selected by hand.
-    }
-  };
+  const { copied, copy } = useCopy();
 
   return (
     <Container className="my-20 rounded-md border border-dashed border-black/20 py-8 dark:border-white/10">
@@ -48,11 +30,12 @@ export default function CTA({
         <p className="mb-4 text-center text-base opacity-50 md:text-xl">
           {preText}
         </p>
-        <div className="mt-4 flex w-full flex-wrap items-center justify-center gap-2 sm:mt-0 sm:w-auto sm:justify-end">
-          <a
-            href={href}
-            aria-label={`Email ${profileAlt} at ${email}`}
-            className={`group cursor-pointer gap-2 ${CHIP}`}
+        <div className="mt-4 flex w-full justify-center sm:mt-0 sm:w-auto sm:justify-end">
+          <button
+            type="button"
+            onClick={() => copy(email)}
+            aria-label={`Copy email address ${email}`}
+            className="group inline-flex cursor-pointer items-center gap-2 self-end rounded-md border border-dashed border-black/20 bg-black/5 px-2 py-1 text-sm text-black shadow-[0_0_5px_rgba(0,0,0,0.1)] transition-all hover:bg-black/10 dark:border-white/30 dark:bg-white/15 dark:text-white dark:shadow-[0_0_5px_rgba(255,255,255,0.1)] dark:hover:bg-white/25"
           >
             <span className="h-5 w-5 shrink-0 overflow-hidden rounded-full">
               <Image
@@ -64,27 +47,29 @@ export default function CTA({
                 style={{ color: "transparent" }}
               />
             </span>
-            <span className="text-sm font-bold whitespace-nowrap underline decoration-dotted underline-offset-4 group-hover:decoration-solid">
-              {email}
-            </span>
-          </a>
-
-          <button
-            type="button"
-            onClick={copyEmail}
-            aria-label={copied ? "Email address copied" : "Copy email address"}
-            className={`cursor-pointer gap-1.5 hover:bg-black/10 dark:hover:bg-white/25 ${CHIP}`}
-          >
+            <span className="text-sm font-bold whitespace-nowrap">{email}</span>
             {copied ? (
-              <Check className="size-4 text-emerald-600 dark:text-emerald-400" />
+              <Check
+                aria-hidden
+                className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+              />
             ) : (
-              <Copy className="size-4" />
+              <Copy
+                aria-hidden
+                className="size-4 shrink-0 opacity-50 transition-opacity group-hover:opacity-100"
+              />
             )}
-            <span className="text-sm font-medium">
-              {copied ? "Copied" : "Copy"}
-            </span>
           </button>
         </div>
+        {/* Live region so the copy is announced, not just shown. */}
+        <p
+          aria-live="polite"
+          className={`mt-2 text-center text-xs transition-opacity ${
+            copied ? "opacity-60" : "opacity-0"
+          }`}
+        >
+          {copied ? "Copied to clipboard" : ""}
+        </p>
       </div>
     </Container>
   );
