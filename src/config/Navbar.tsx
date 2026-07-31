@@ -9,10 +9,6 @@ export const navbarConfig: NavItem[] = [
     href: "/work-experience",
   },
   {
-    label: "Blogs",
-    href: "/blog",
-  },
-  {
     label: "Projects",
     href: "/projects",
   },

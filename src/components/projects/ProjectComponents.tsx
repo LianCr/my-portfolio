@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { getTechnologyIcon } from "@/config/technologies";
 
-import { CodeCopyButton } from "../blog/CodeCopyButton";
+import { CodeCopyButton } from "./CodeCopyButton";
 
 // Custom Technology component for displaying technology badges with icons (uses central registry)
 const Technology = ({ name }: { name: string }) => {
@@ -134,7 +134,6 @@ const Learnings = ({ learnings }: { learnings: string[] }) => {
 };
 
 export const ProjectComponents = {
-  // Inherit blog components for basic markdown
   img: ({
     src,
     alt,
