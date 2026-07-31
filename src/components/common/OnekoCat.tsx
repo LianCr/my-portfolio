@@ -9,5 +9,7 @@ export default function OnekoCat() {
     return null;
   }
 
-  return <Script src="./oneko/oneko.js" data-cat="./oneko/oneko.gif" />;
+  // Absolute paths — relative ones resolve against the current route, so on
+  // /projects/deallens these became /projects/oneko/* and 404'd.
+  return <Script src="/oneko/oneko.js" data-cat="/oneko/oneko.gif" />;
 }
