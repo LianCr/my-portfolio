@@ -35,7 +35,7 @@ const FALLBACK_ERROR_MESSAGE =
 const getInitialMessages = (): Message[] => [
   {
     id: 1,
-    text: "Hello! I'm Abdullah's Portfolio Assistant. How can I help you?",
+    text: "Hi — I'm Ryan's portfolio assistant. Ask me about his projects, experience, or what he's looking for.",
     sender: "bot",
     timestamp: new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -50,7 +50,27 @@ const ChatBubble: React.FC = () => {
   );
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // null = still checking. The rest of the site never depends on the chat, so
+  // an unreachable or unconfigured endpoint just hides the widget.
+  const [isEnabled, setIsEnabled] = useState<boolean | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    fetch("/api/chat")
+      .then((res) => (res.ok ? res.json() : { enabled: false }))
+      .then((data) => {
+        if (active) setIsEnabled(Boolean(data.enabled));
+      })
+      .catch(() => {
+        if (active) setIsEnabled(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -162,14 +182,19 @@ const ChatBubble: React.FC = () => {
         }),
       });
 
-      // Handle rate limiting
-      if (response.status === 429) {
+      // Rate limit (per-IP or the global daily cap) and offline both carry
+      // honest server-authored copy — show it rather than a generic string.
+      if (response.status === 429 || response.status === 503) {
+        const body = await response.json().catch(() => null);
+
+        if (response.status === 503) setIsEnabled(false);
+
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === botMessageId
               ? {
                   ...msg,
-                  text: `⚠️ **Rate limit reached!**\n\nPlease try again after **60 seconds**.`,
+                  text: body?.message ?? FALLBACK_ERROR_MESSAGE,
                   isStreaming: false,
                   isError: true,
                 }
@@ -290,6 +315,10 @@ const ChatBubble: React.FC = () => {
     }
   };
 
+  // No API key configured (or the endpoint is unreachable) — render nothing
+  // rather than a chat that fails on first use.
+  if (isEnabled !== true) return null;
+
   return (
     <ExpandableChat
       className="mt-4 ml-4 max-h-[95vh] max-w-[calc(100vw-2rem)] hover:cursor-pointer sm:max-w-[calc(100vw-4rem)] md:max-w-xl"
@@ -302,7 +331,7 @@ const ChatBubble: React.FC = () => {
           <div className="flex items-center space-x-3">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src="/assets/logo.png"
+                src="/assets/avatar.png"
                 alt="Assistant"
                 className="object-cover"
               />
@@ -345,7 +374,7 @@ const ChatBubble: React.FC = () => {
                   {message.sender === "bot" && (
                     <Avatar className="h-6 w-6">
                       <AvatarImage
-                        src="/assets/logo.png"
+                        src="/assets/avatar.png"
                         alt="Assistant"
                         className="object-cover"
                       />
