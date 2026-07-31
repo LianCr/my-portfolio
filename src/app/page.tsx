@@ -1,6 +1,7 @@
 import Container from "@/components/common/Container";
 import CTA from "@/components/landing/CTA";
 import Experience from "@/components/landing/Experience";
+import Github from "@/components/landing/Github";
 import Hero from "@/components/landing/Hero";
 import Work from "@/components/landing/Projects";
 import Skills from "@/components/landing/Skills";
@@ -12,6 +13,7 @@ export default function page() {
       <Experience />
       <Skills />
       <Work />
+      <Github />
       <CTA />
     </Container>
   );

@@ -35,7 +35,8 @@ All four template-feature deletions are done. Left here as a record of what went
 - ~~Gear/Setup page~~ — route, config, `components/gears/`, homepage Setup card, Meta entries
 - ~~Resume page + Navbar resume link~~ — no PDF download anywhere
 - ~~Blog~~ — routes, `content/blogs/`, `components/blog/`, `lib/blog.ts`, `types/blog.ts`, `FontSizeControls`, the blogs content-collection, Navbar entry. `CodeCopyButton` survived (moved to `components/projects/`, still used by project MDX). The `.prose` font-size CSS survived, with `--blog-font-size` renamed `--prose-font-size`.
-- ~~GitHub contribution calendar~~ — plus the Discord/Lanyard `Presence` widget and `/api/presence` that lived inside it (needed `LANYARD_*` env vars we'll never set)
+- ~~Discord/Lanyard `Presence` widget and `/api/presence`~~ — needed `LANYARD_*` env vars we'll never set. It lived inside the GitHub section, which is why it went out with it.
+- **GitHub contribution calendar: deleted, then brought back** (homepage, above the CTA). Username is in `src/config/Github.tsx`. Data comes from `github-contributions-api.jogruber.de`, a third party — no token needed, but it can be down, so the component renders an error message rather than an empty gap. The `Presence` widget did **not** come back with it.
 - ~~Template demo projects~~ — 7 MDX files, `public/project/`, unused `public/skills/`
 
 Dependencies dropped as a result: `react-github-calendar`, `lenis` (the latter was already dead — `ReactLenis` was never mounted).
