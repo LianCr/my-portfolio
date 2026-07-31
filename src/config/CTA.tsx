@@ -1,13 +1,14 @@
 export const ctaConfig = {
   // Profile image settings
-  profileImage: "/assets/logo.png",
-  profileAlt: "Profile",
+  profileImage: "/assets/avatar.png",
+  profileAlt: "Chunren Lian",
 
   // CTA button settings
-  linkText: "Book a Free Call",
-  calLink: "abdulah/meeting",
+  linkText: "Get in touch",
+  email: "nicklien307@gmail.com",
+  subject: "Hello from your portfolio",
 
   // Pre-text message
   preText:
-    "Interested in working together or have questions? Let’s jump on a quick call.",
+    "Open to Software Engineer and Full-Stack roles. If you're hiring or want to talk through anything you see here, send me a note.",
 };

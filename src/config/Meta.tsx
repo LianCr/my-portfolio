@@ -9,143 +9,83 @@ export interface PageMeta {
   twitterCard?: "summary" | "summary_large_image";
 }
 
-// Base site configuration
+// Base site configuration.
+// `url` is env-driven: set NEXT_PUBLIC_URL in Vercel to the live domain so OG
+// tags and canonical links resolve absolutely. Locally it falls back to :3000.
 export const siteConfig = {
   name: heroConfig.name,
-  title: "Portfolio",
-  description: "Portfolio Template by @Abdul_ah14",
+  title: `${heroConfig.name} — ${heroConfig.title}`,
+  description:
+    "Full-stack engineer building commerce and AI products. React, Angular, Node.js, Python.",
   url: process.env.NEXT_PUBLIC_URL || "http://localhost:3000",
   ogImage: "/meta/opengraph-image.png",
   author: {
     name: about.name,
-    twitter: "@Abdul_ah14",
-    github: "Abdullah-dev0",
-    linkedin: "Abdullah-dev0",
-    email: "abdulah14200@gmail.com",
+    github: "LianCr",
+    linkedin: "ryan-lian-a1b719249",
+    email: "nicklien307@gmail.com",
   },
   keywords: [
-    "portfolio",
-    "developer",
-    "full-stack",
+    "chunren lian",
+    "ryan lian",
+    "full-stack engineer",
+    "software engineer",
+    "los angeles",
     "react",
+    "angular",
     "nextjs",
     "typescript",
-    "web development",
-    heroConfig.name.toLowerCase(),
+    "node.js",
+    "python",
   ],
 };
 
 export const pageMetadata: Record<string, PageMeta> = {
   // Home page
   "/": {
-    title: `${heroConfig.name} - ${heroConfig.title}`,
-    description: `${about.description} Explore my projects, experience, and technical expertise.`,
+    title: `${heroConfig.name} — ${heroConfig.title}`,
+    description:
+      "Full-stack engineer in Los Angeles building commerce and AI products, with guardrails enforced in code rather than left to the model.",
     keywords: [
+      "chunren lian",
+      "ryan lian",
+      "full-stack engineer",
+      "software engineer",
       "portfolio",
-      "developer",
-      "full-stack",
-      "web development",
-      "projects",
     ],
-    ogImage: "/meta/hero.png",
+    ogImage: "/meta/opengraph-image.png",
     twitterCard: "summary_large_image",
   },
 
   // Work Experience page
   "/work-experience": {
-    title: "Work Experience - Professional Journey",
+    title: `Work Experience — ${heroConfig.name}`,
     description:
-      "Explore my professional work experience across different companies and roles in software development.",
+      "Commerce and fintech engineering work: cart and checkout systems at Ryzlink (Chuwa America), and a multi-currency digital banking platform at ZentraPay.",
     keywords: [
       "work experience",
+      "full-stack engineer",
+      "e-commerce",
+      "fintech",
       "career",
-      "professional",
-      "software developer",
-      "employment history",
     ],
-    ogImage: "/meta/work.png",
+    ogImage: "/meta/opengraph-image.png",
     twitterCard: "summary_large_image",
   },
 
   // Projects page
   "/projects": {
-    title: "Projects - My Work & Projects Portfolio",
+    title: `Projects — ${heroConfig.name}`,
     description:
-      "Discover my projects and work across different technologies and domains. From web apps to mobile solutions.",
+      "Case studies on Smart Money Decoder and DealLens — how each system is architected, what it deliberately refuses to claim, and how that is enforced.",
     keywords: [
       "projects",
-      "portfolio",
-      "web development",
-      "applications",
-      "software",
+      "case studies",
+      "smart money decoder",
+      "deallens",
+      "software engineering",
     ],
-    ogImage: "/meta/projects.png",
-    twitterCard: "summary_large_image",
-  },
-
-  // Blog page
-  "/blog": {
-    title: "Blog - Thoughts & Tutorials",
-    description:
-      "Read my thoughts, tutorials, and insights on engineering, programming, and web development.",
-    keywords: [
-      "blog",
-      "tutorials",
-      "programming",
-      "web development",
-      "technical writing",
-    ],
-    ogImage: "/meta/blogs.png",
-    twitterCard: "summary_large_image",
-  },
-
-  // Resume page
-  "/resume": {
-    title: "Resume - Professional CV",
-    description: `View and download ${heroConfig.name}'s professional resume and CV. Technical skills, experience, and qualifications.`,
-    keywords: [
-      "resume",
-      "cv",
-      "professional",
-      "skills",
-      "qualifications",
-      "download",
-    ],
-    ogImage: "/meta/resume.png",
-    twitterCard: "summary",
-  },
-
-  // Gears page
-  "/gears": {
-    title: "Gears - My Setup & Tools",
-    description:
-      "Discover the tools, devices, and software I use to get my work done efficiently.",
-    keywords: [
-      "setup",
-      "tools",
-      "devices",
-      "software",
-      "productivity",
-      "development environment",
-    ],
-    ogImage: "/meta/gears.png",
-    twitterCard: "summary_large_image",
-  },
-
-  // Setup page
-  "/setup": {
-    title: "Setup Guide - VS Code Configuration",
-    description:
-      "Complete guide to setting up VS Code with my preferred configuration, extensions, and fonts for optimal development.",
-    keywords: [
-      "vscode",
-      "setup",
-      "configuration",
-      "extensions",
-      "development environment",
-      "guide",
-    ],
-    ogImage: "/meta/setup.png",
+    ogImage: "/meta/opengraph-image.png",
     twitterCard: "summary_large_image",
   },
 };
@@ -185,7 +125,6 @@ export function generateMetadata(pathname: string) {
       card: pageMeta.twitterCard || "summary_large_image",
       title: pageMeta.title,
       description: pageMeta.description,
-      creator: siteConfig.author.twitter,
       images: [pageMeta.ogImage || siteConfig.ogImage],
     },
     robots: {
