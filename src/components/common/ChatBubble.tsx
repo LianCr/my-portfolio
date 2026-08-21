@@ -339,7 +339,7 @@ const ChatBubble: React.FC = () => {
             </Avatar>
             <div>
               <h3 className="text-sm font-semibold">
-                {heroConfig.name}s Portfolio Assistant
+                {heroConfig.name}&apos;s Portfolio Assistant
               </h3>
               <div className="text-muted-foreground text-xs">
                 <div className="flex items-center gap-1">

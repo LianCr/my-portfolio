@@ -8,7 +8,7 @@ import { Redis } from "@upstash/redis";
 import { systemPrompt } from "@/config/ChatPrompt";
 
 /**
- * Chat endpoint — answers questions about Chunren only.
+ * Chat endpoint — answers questions about Ryan only.
  *
  * Guardrails (ported from the DealLens pattern):
  *   - per-IP rate limit + a global daily request cap, both with honest 429 copy
@@ -149,7 +149,7 @@ function getClientIP(request: NextRequest): string {
 }
 
 function mockReply(message: string): string {
-  return `**Mock reply** (MOCK_AI=1, no tokens spent).\n\nYou asked: "${message.slice(0, 120)}".\n\nAsk me about Smart Money Decoder, DealLens, or Chunren's experience.`;
+  return `**Mock reply** (MOCK_AI=1, no tokens spent).\n\nYou asked: "${message.slice(0, 120)}".\n\nAsk me about Smart Money Decoder, AgentDesk, or Ryan's experience.`;
 }
 
 /** Server-Sent Events in the shape the chat client already parses. */

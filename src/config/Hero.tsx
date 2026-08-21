@@ -6,7 +6,7 @@ import Github from "@/components/svgs/Github";
 import LinkedIn from "@/components/svgs/LinkedIn";
 
 export const heroConfig = {
-  name: "Chunren Lian",
+  name: "Ryan Lian",
   title: "Full-Stack Engineer",
   rotatingTitles: [
     "Full-Stack Engineer",
@@ -15,7 +15,7 @@ export const heroConfig = {
   ],
   avatar: "/assets/avatar.png",
   location: "Los Angeles",
-  bio: "Full-stack engineer who goes by Ryan. I build commerce and AI products where the guardrails live in code — server-authoritative pricing, anti-fabrication checks, and tests that gate the deploy.",
+  bio: "Full-stack engineer building commerce, fintech, and AI products where the guardrails live in code — server-authoritative pricing, citations verified before render, and tests that gate the deploy.",
 };
 
 export interface SocialLink {
@@ -44,7 +44,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     name: "Email",
-    label: "Chunren Lian",
+    label: "Ryan Lian",
     href: "mailto:liancr307@gmail.com",
     copyValue: "liancr307@gmail.com",
     icon: Mail,

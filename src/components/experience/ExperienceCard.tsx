@@ -13,6 +13,7 @@ import Skill from "../common/Skill";
 import Github from "../svgs/Github";
 import LinkedIn from "../svgs/LinkedIn";
 import X from "../svgs/X";
+import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface ExperienceCardProps {
@@ -129,13 +130,25 @@ export function ExperienceCard({ experience }: ExperienceCardProps) {
         <div className="flex flex-wrap gap-2">
           {experience.technologies.map((name, techIndex) => {
             const tech = getTechnologyByName(name);
+            const icon = getTechnologyIcon(name);
+
+            // Without an icon this would be an invisible but hoverable box,
+            // so unregistered technologies fall back to a labelled chip.
+            if (!icon) {
+              return (
+                <Badge key={techIndex} variant="outline" className="text-xs">
+                  {tech?.name ?? name}
+                </Badge>
+              );
+            }
+
             return (
               <Skill
                 key={techIndex}
                 name={tech?.name ?? name}
                 href={tech?.href ?? ""}
               >
-                {getTechnologyIcon(name) ?? null}
+                {icon}
               </Skill>
             );
           })}

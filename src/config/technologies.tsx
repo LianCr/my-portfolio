@@ -5,6 +5,7 @@ import ApolloGraphQL from "@/components/technologies/ApolloGraphQL";
 import AuthJs from "@/components/technologies/AuthJs";
 import AWS from "@/components/technologies/AWS";
 import BetterAuth from "@/components/technologies/BetterAuth";
+import Bootstrap from "@/components/technologies/Bootstrap";
 import Bun from "@/components/technologies/Bun";
 import Claude from "@/components/technologies/Claude";
 import Clerk from "@/components/technologies/Clerk";
@@ -34,6 +35,7 @@ import ReactIcon from "@/components/technologies/ReactIcon";
 import Redis from "@/components/technologies/Redis";
 import Redux from "@/components/technologies/Redux";
 import Resend from "@/components/technologies/Resent";
+import Sass from "@/components/technologies/Sass";
 import Shadcn from "@/components/technologies/Shadcn";
 import Stripe from "@/components/technologies/Stripe";
 import Supabase from "@/components/technologies/Supabase";
@@ -42,6 +44,7 @@ import TypeScript from "@/components/technologies/TypeScript";
 import Vercel from "@/components/technologies/Vercel";
 import Vitest from "@/components/technologies/Vitest";
 import WebAuthn from "@/components/technologies/WebAuthn";
+import Webpack from "@/components/technologies/Webpack";
 
 export interface TechnologyEntry {
   id: string;
@@ -88,7 +91,12 @@ export const technologies: TechnologyEntry[] = [
   { id: "Python", name: "Python", href: "https://www.python.org/" },
   { id: "FastApi", name: "FastAPI", href: "https://fastapi.tiangolo.com/" },
   { id: "Angular", name: "Angular", href: "https://angular.dev/" },
-  { id: "Redux", name: "Redux Toolkit", href: "https://redux-toolkit.js.org/" },
+  { id: "Redux", name: "Redux", href: "https://redux.js.org/" },
+  {
+    id: "ReduxToolkit",
+    name: "Redux Toolkit",
+    href: "https://redux-toolkit.js.org/",
+  },
   { id: "GraphQL", name: "GraphQL", href: "https://graphql.org/" },
   {
     id: "ApolloGraphQL",
@@ -108,6 +116,9 @@ export const technologies: TechnologyEntry[] = [
     href: "https://github.com/features/actions",
   },
   { id: "WebAuthn", name: "WebAuthn", href: "https://webauthn.guide/" },
+  { id: "Sass", name: "SASS", href: "https://sass-lang.com/" },
+  { id: "Webpack", name: "Webpack", href: "https://webpack.js.org/" },
+  { id: "Bootstrap", name: "Bootstrap", href: "https://getbootstrap.com/" },
 ];
 
 /** Lookup by id (e.g. "TypeScript") or display name (e.g. "Next.js"). */
@@ -166,6 +177,10 @@ const iconByKey: Record<string, React.ReactNode> = {
   "GitHub Actions": <GitHubActions />,
   GitHubActions: <GitHubActions />,
   WebAuthn: <WebAuthn />,
+  SASS: <Sass />,
+  Sass: <Sass />,
+  Webpack: <Webpack />,
+  Bootstrap: <Bootstrap />,
 };
 
 /**
@@ -200,7 +215,7 @@ const KEY_ALIASES: Record<string, string> = {
   python: "Python",
   fastapi: "FastAPI",
   angular: "Angular",
-  redux: "Redux Toolkit",
+  redux: "Redux",
   "redux toolkit": "Redux Toolkit",
   rtk: "Redux Toolkit",
   "rtk query": "Redux Toolkit",
@@ -221,6 +236,11 @@ const KEY_ALIASES: Record<string, string> = {
   cypress: "Cypress",
   "github actions": "GitHub Actions",
   webauthn: "WebAuthn",
+  sass: "SASS",
+  scss: "SASS",
+  webpack: "Webpack",
+  bootstrap: "Bootstrap",
+  "bootstrap 5": "Bootstrap",
 };
 
 /** Normalize common variants to a key that exists in iconByKey. */

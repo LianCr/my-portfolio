@@ -1,7 +1,7 @@
 export const ctaConfig = {
   // Profile image settings
   profileImage: "/assets/avatar.png",
-  profileAlt: "Chunren Lian",
+  profileAlt: "Ryan Lian",
 
   // The address is the button label, and clicking copies it rather than
   // opening a mailto: — a mailto does nothing on a machine with no mail client

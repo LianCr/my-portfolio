@@ -1,5 +1,5 @@
 export const footerConfig = {
-  developer: "Chunren Lian",
+  developer: "Ryan Lian",
   copyright: "All rights reserved.",
   location: "Los Angeles",
 };

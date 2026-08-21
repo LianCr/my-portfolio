@@ -1,6 +1,6 @@
-# Chunren Lian — Portfolio
+# Ryan Lian — Portfolio
 
-Personal site for **Chunren Lian (Ryan)**, a full-stack engineer in Los Angeles.
+Personal site for **Ryan Lian**, a full-stack engineer in Los Angeles.
 Projects, case studies, and work history, plus a small chat assistant that
 answers questions about my work.
 
